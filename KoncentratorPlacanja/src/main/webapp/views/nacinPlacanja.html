@@ -1,0 +1,30 @@
+<link href="//maxcdn.bootstrapcdn.com/bootstrap/3.3.0/css/bootstrap.min.css" rel="stylesheet" id="bootstrap-css">
+
+<script src="//code.jquery.com/jquery-1.11.1.min.js"></script>
+
+<script src="../angular/jquery-3.2.1.slim.min.js" integrity="sha384-KJ3o2DKtIkvYIK3UENzmM7KCkRr/rE9/Qpg6aAZGJwFDMVNA/GpGFF93hXpG5KkN" crossorigin="anonymous"></script>
+<script src="../angular/popper.min.js" integrity="sha384-vFJXuSJphROIrBnz7yo7oB41mKfc8JzQZiCq4NCceLEaO4IHwicKwpJf9c9IpFgh" crossorigin="anonymous"></script>
+<script src="../angular/bootstrap.min.js" integrity="sha384-alpBpkh1PFOepccYVYDB4do5UnbKysX5WZXm3XxPqe5iKTfUKjNkCk9SaVuEZflJ" crossorigin="anonymous"></script>
+
+
+<link rel="stylesheet" type="text/css" href="css/nacinPlacanja.css">
+<div class="container">
+
+	<h2 class="headingTop text-center">Izaberite nacin placanja:</h2>	
+
+	<div class="cc-selector" align="center" >
+		<input checked="true"  id="kartica" type="radio" ng-model="opcija" name="credit-card" value="kartica" />
+		<label class="drinkcard-cc kartica" for="kartica"></label>
+		<input id="paypal" type="radio" ng-model="opcija" name="credit-card" value="paypal" />
+		<label class="drinkcard-cc paypal"for="paypal"></label>
+		<input id="bitcoin" type="radio" ng-model="opcija" name="credit-card" value="bitcoin" />
+		 <label class="drinkcard-cc bitcoin"for="bitcoin"></label>
+	</div>				
+	
+	
+	<div class="container">
+		<div class="btn btn-primary pull-left btn-fyi"><span class="glyphicon glyphicon-chevron-left"></span> NAZAD</div>
+		<div class="btn btn-primary pull-right btn-fyi" ng-click="izaberi(opcija)">IZABERI<span class="glyphicon glyphicon-chevron-right"></span></div>
+	</div>
+</div>
+
