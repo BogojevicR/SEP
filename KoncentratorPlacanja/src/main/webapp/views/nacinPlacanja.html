@@ -13,10 +13,10 @@
 	<h2 class="headingTop text-center">Izaberite nacin placanja:</h2>	
 
 	<div class="cc-selector" align="center" >
-		<input checked="true"  id="kartica" type="radio" ng-model="opcija" name="credit-card" value="kartica" />
+		<input id="kartica" type="radio" ng-model="opcija" name="credit-card" value="kartica" />
 		<label class="drinkcard-cc kartica" for="kartica"></label>
 		<input id="paypal" type="radio" ng-model="opcija" name="credit-card" value="paypal" />
-		<label class="drinkcard-cc paypal"for="paypal"></label>
+		<label class="drinkcard-cc paypal" for="paypal"></label>
 		<input id="bitcoin" type="radio" ng-model="opcija" name="credit-card" value="bitcoin" />
 		 <label class="drinkcard-cc bitcoin"for="bitcoin"></label>
 	</div>				
@@ -27,4 +27,6 @@
 		<div class="btn btn-primary pull-right btn-fyi" ng-click="izaberi(opcija)">IZABERI<span class="glyphicon glyphicon-chevron-right"></span></div>
 	</div>
 </div>
+
+
 

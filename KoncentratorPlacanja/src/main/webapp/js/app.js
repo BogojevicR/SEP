@@ -3,16 +3,24 @@ var app= angular.module('app',['ui.router','app.services','app.controllers']);
 app.config(function($stateProvider,$urlRouterProvider) {
 	$stateProvider
 	.state('index', {
-		url:'',
+		url:'/',
 		templateUrl:'views/nacinPlacanja.html',
 		controller:'appController'
 	})
-	.state('nacinPlacanja',{
-		url:'/nacinPlacanja',
-		templateUrl:'views/nacinPlacanja.html',
+	.state('paypal',{
+		url:'/paypal',
+		templateUrl:'views/paypal.html',
+		controller:'appController'
+	}).state('sucess',{
+		url:'/sucess',
+		templateUrl:'views/sucess.html',
+		controller:'appController'
+	}).state('racun',{
+		url:'/racun',
+		templateUrl:'views/racun.html',
 		controller:'appController'
 	});
-	$urlRouterProvider.otherwise('/');
+	$urlRouterProvider.otherwise('/#');
 	
 	
 });
