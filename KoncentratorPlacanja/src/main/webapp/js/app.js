@@ -19,6 +19,14 @@ app.config(function($stateProvider,$urlRouterProvider) {
 		url:'/racun',
 		templateUrl:'views/racun.html',
 		controller:'appController'
+	}).state('bitcoin',{
+		url:'/bitcoin',
+		templateUrl:'views/bitcoin.html',
+		controller:'appController'
+	}).state('kartica',{
+		url:'/kartica',
+		templateUrl:'views/kartica.html',
+		controller:'appController'
 	});
 	$urlRouterProvider.otherwise('/#');
 	

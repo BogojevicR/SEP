@@ -1,0 +1,66 @@
+<div ng-init="init()"></div>
+<br>
+<div align="center">
+<button class="btn btn-primary"  data-toggle="modal" data-target="#logWindow" >Login into your Account</button>
+
+<button class="btn btn-primary" data-toggle="modal" data-target="#regWindow" >Register new Account</button>
+</div>
+
+
+
+ 
+<div class="modal fade" id="regWindow">
+	<div class="modal-dialog">
+		<div class="modal-content">
+			<div align="right" class="modal-header">
+				<buttontype="button" id="regclose" name="regclose" class="close"  data-dismiss="modal">&times;</button>
+			</div>
+			<div class="modal-body">
+				<form role="form">
+					<div class="form-group">
+						<input  type="text"  data-ng-model="username"  class="form-control" placeholder="Username" required = "required" >
+						<input  type="text"  data-ng-model="lozinka" class="form-control" placeholder="Lozinka" required = "required">
+						<input  type="text" class="form-control" data-ng-model="ime" placeholder="Ime" required = "required">
+						<input  type="text" class="form-control" data-ng-model="prezime" placeholder="Prezime" required = "required">	
+						<div class="selectContainer" >
+				        	<select class="form-control sirina" ng-model="uloga" ng-change="changedRole(uloga)"  ng-options="x for x in roles">
+ 							</select>
+				        </div>
+						
+						<input  type="text" id="adresa" name="adresa" data-ng-model="adresa" class="form-control" placeholder="Adresa isporuke" required = "required">
+						<div class="modal-footer"> 
+							<input type="submit" data-dismiss="modal" ng-click="createKorisnik(username,lozinka,ime,prezime,datePicker,uloga,adresa)" class="btn btn-primary btn-block" value="Register" id="register" >
+						</div>
+					</div>
+					
+				</form>
+			</div>
+		</div>
+	</div>				
+</div>		
+
+<!-- LOGIN POPUP WINDOW -->
+
+<div class="modal fade" id="logWindow">
+		<div class="modal-dialog">
+			<div class="modal-content">
+				<div align="right" class="modal-header">
+					<buttontype="button" class="close"  data-dismiss="modal">&times;</button>
+				</div>
+				<div class="modal-body">
+					<form role="form">
+						<div class="form-group">
+							<input type="text" ng-model="pan" class="form-control" placeholder="Pan" required = "required">
+							<input type="password" ng-model="secret" class="form-control" placeholder="Secret" required = "required">
+							<div class="modal-footer">
+							<input type="submit" ng-click="login(pan,secret)" class="btn btn-primary btn-block" data-dismiss="modal" value="Login"  >
+							</div>
+						</div>
+				</div>
+				</form>
+
+			</div>
+		</div>
+	
+	</div>
+</div>		

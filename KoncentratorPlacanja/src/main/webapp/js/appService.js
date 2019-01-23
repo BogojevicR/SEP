@@ -27,6 +27,7 @@ services.service('appService', ['$http', '$rootScope','$window',
 	
 	
 	this.kreiraj = function(racun) {
+		console.log(localStorage.getItem('token_type') + ' '+ localStorage.getItem('token'));
 		return $http({
 			method: 'POST',
 			headers: {
@@ -60,6 +61,31 @@ services.service('appService', ['$http', '$rootScope','$window',
 			});	
 
 	};
+	
+	this.bitcoinPayment=function(json){
+		console.log(json);
+		return $http({
+			method: 'POST',
+			headers: {
+				'Accept': 'application/json',
+                'Content-Type': 'application/json',
+                'cache-control': 'no-cache',
+				'Authorization': 'Bearer UgSUMdDH_9qcXH7u8XdUjrX5Ud-iFCGAnx2XNymB'
+			
+		         },
+			url: "https://api-sandbox.coingate.com/v2/orders",
+			data: json
+			});			
+	}
+	
+	this.karticaPayment=function(json){
+		console.log(json)
+		return $http({
+			method: 'POST',
+			url: "http://localhost:8082/api/bank/createPayment",
+			data: json
+			});			
+	}
 	
 }
 ]);

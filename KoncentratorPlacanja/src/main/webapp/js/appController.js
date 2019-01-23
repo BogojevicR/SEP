@@ -1,6 +1,35 @@
 var app=angular.module('app.controllers',[]);
 
-app.controller('appController',['$http','$window','$location','$rootScope','$scope','appService',
+/*app.factory('responseInterceptor', [function(){
+	var responseInterceptor={
+			request: function(config){
+				console.log(config);
+				config.headers["Access-Control-Allow-Origin"]="http://localhost:8081";
+				config.headers["Access-Control-Allow-Methods"]="GET, PUT, POST, DELETE, HEAD, OPTIONS";
+				config.headers["Access-Control-Allow-Credentials"]="true";
+				config.headers["Access-Control-Allow-Headers"]="Content-Type, Accept, X-Requested-With, Authorization-Token, Response-Type";
+
+				return config;
+			},
+			response: function(response){
+				console.log(response.config);
+				response.config.headers["Access-Control-Allow-Origin"]="http://localhost:8081";
+				response.config.headers["Access-Control-Allow-Credentials"]="true";
+				response.config.headers["Access-Control-Allow-Methods"]="POST, GET, PUT, OPTIONS, DELETE";
+				response.config.headers["Access-Control-Max-Age"]="3600";
+				response.config.headers["Access-Control-Allow-Headers"]="Content-Type, Accept, X-Requested-With, Authorization-Token, Response-Type";
+				return response;
+			}		
+	};
+	return responseInterceptor;
+}]);
+
+app.config(['$httpProvider', function($httpProvider){
+	$httpProvider.interceptors.push('responseInterceptor');
+}]);
+*/
+
+app.controller('appController',['$http','$window','$location','$rootScope','$scope','appService',/*'responseInterceptor' , */
     function($http,$window,$location,$scope,$rootScope, appService) {  
 	
 	$scope.izaberi=function(opcija){
@@ -9,9 +38,11 @@ app.controller('appController',['$http','$window','$location','$rootScope','$sco
 		$window.location.reload();
 		
 	}
-	
+	// PAYPAL
 	$scope.paypalInit=function(){
 		appService.getToken().then(function(response){
+			
+		//	console.log(response)
 			$scope.kreiraj();
 		});
 		
@@ -29,19 +60,9 @@ app.controller('appController',['$http','$window','$location','$rootScope','$sco
 				      "amount": {
 				        "total": "5.00",
 				        "currency": "USD",
-				    /*    "details": {
-				          "subtotal": "5.00",
-				          "tax": "0.00",
-				          "shipping": "0.00",
-				          "handling_fee": "0.00",
-				          "shipping_discount": "0.00",
-				          "insurance": "0.00"
-				        } */
 				      },
 				      "description": "The payment transaction description.",
 				      "custom": "EBAY_EMS_90048630024435",
-				      // TODO 1 INVOCE NUMBER TREBA DA JE RAZLICIT STALNO!!! IMA DA SAM GENERISE PGOLEDAJ TO U SACUVANIM
-				      
 				      "payment_options": {
 				        "allowed_payment_method": "INSTANT_FUNDING_SOURCE"
 				      },
@@ -58,16 +79,6 @@ app.controller('appController',['$http','$window','$location','$rootScope','$sco
 				            "currency": "USD"
 				          }
 				        ],
-				      /*  "shipping_address": {
-				          "recipient_name": "Brian Robinson",
-				          "line1": "4th Floor",
-				          "line2": "Unit #34",
-				          "city": "San Jose",
-				          "country_code": "US",
-				          "postal_code": "95131",
-				          "phone": "011862212345678",
-				          "state": "CA"
-				        } */
 				      }
 				    }
 				  ],
@@ -112,5 +123,53 @@ app.controller('appController',['$http','$window','$location','$rootScope','$sco
 		
 	}
 	
+	//BITCOIN
+	
+	$scope.bitcoinInit=function(){
+		var request={
+				  "order_id": '1195865',
+				  "price_amount": "0.2",
+				  "price_currency": "USD",
+				  "receive_currency": "BTC",
+				  "receive_amount": "",
+				  "title": "Casopis",
+				  "description": "Placanje naucnog casopisa",
+				  "callback_url": "http://localhost:8081",
+				  "cancel_url": "https://coingate.com/invoice/6003de09-ee9a-4584-be0e-5c0c71c5e497",
+				  "success_url": "http://localhost:8081",
+				  "token": "MVsgsjGXv-pRWMnZzsuD4B5xcdnj-w"
+				};
+		
+		var json = JSON.stringify(request);
+		
+		appService.bitcoinPayment(json).then(function(response){
+			console.log(response);
+		});	
+	}
+		
+		//KARTICA
+		
+		$scope.karticaInit=function(){
+			
+			var request={
+					  "id": 1195862,
+					  "merchantId": "asd",
+					  "merchantPassword": "asd",
+					  "merchantOrderId": "10",
+					  "amount": "20",
+					  "sucessUrl": "Casopis",
+					  "failedUrl": "Placanje naucnog casopisa",
+					  "errorUrl": ""
+
+					};
+			
+			var json = JSON.stringify(request);
+			
+			appService.karticaPayment(json).then(function(response){
+				console.log(response);
+				window.location = response.data.payment_url;
+			});	
+		
+	}
 	
 }]);
