@@ -16,8 +16,7 @@ public class KoncentratorPlacanjaController {
 	@CrossOrigin(origins = "http://localhost:8081")
 	@RequestMapping(value="createPayment",method=RequestMethod.POST, produces=MediaType.APPLICATION_JSON_VALUE)
 	public String createPayment(@RequestBody BitcoinRequest bitcoinRequest) {
-		//TODO: PROVERI ISPRAVNOST ZAHTEVA;
-		//TODO: PODESI HOST DA GADJA BANKU GDE SE PLACA ZAHTEV
+
 		
 		
 		

@@ -12,13 +12,11 @@ import javax.persistence.Id;
 public class PaymentRequest implements Serializable {
 	@Id
 	@GeneratedValue(strategy = GenerationType.AUTO)
-	private long id;
+	private long merchantOrderId;
 	@Column
 	private String merchantId;
 	@Column
 	private String merchantPassword;
-	@Column
-	private int merchantOrderId;
 	@Column
 	private Date merchantTimestamp;
 	@Column
@@ -34,10 +32,10 @@ public class PaymentRequest implements Serializable {
 		super();
 	}
 
-	public PaymentRequest(long id,String merchantId, String merchantPassword, int merchantOrderId, Date merchantTimestamp,
+	public PaymentRequest(String merchantId, String merchantPassword, int merchantOrderId, Date merchantTimestamp,
 			double amount, String successUrl, String failedUrl, String errorUrl) {
 		super();
-		this.id=id;
+
 		this.merchantId = merchantId;
 		this.merchantPassword = merchantPassword;
 		this.merchantOrderId = merchantOrderId;
@@ -50,13 +48,7 @@ public class PaymentRequest implements Serializable {
 	
 	
 
-	public long getId() {
-		return id;
-	}
 
-	public void setId(long id) {
-		this.id = id;
-	}
 
 	public String getMerchantId() {
 		return merchantId;
@@ -74,11 +66,11 @@ public class PaymentRequest implements Serializable {
 		this.merchantPassword = merchantPassword;
 	}
 
-	public int getMerchantOrderId() {
+	public long getMerchantOrderId() {
 		return merchantOrderId;
 	}
 
-	public void setMerchantOrderId(int merchantOrderId) {
+	public void setMerchantOrderId(long merchantOrderId) {
 		this.merchantOrderId = merchantOrderId;
 	}
 

@@ -1,5 +1,7 @@
 package ftn.Bank.controllers;
 
+import java.text.ParseException;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.MediaType;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -10,6 +12,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 import ftn.Bank.models.Bank;
 import ftn.Bank.models.BankAccount;
+import ftn.Bank.models.MerchantAccount;
 import ftn.Bank.services.BankAccountService;
 
 @RestController
@@ -21,13 +24,23 @@ public class BankAccountController {
 	
 	
 	@RequestMapping(value="create", method=RequestMethod.POST, produces=MediaType.APPLICATION_JSON_VALUE)
-	public boolean createBankAccount(@RequestBody BankAccount bankAccount) {
+	public BankAccount createBankAccount(@RequestBody BankAccount bankAccount) throws ParseException {
 		return bankAccountService.save(bankAccount);	
+	}
+	
+	@RequestMapping(value="createMerchant", method=RequestMethod.POST, produces=MediaType.APPLICATION_JSON_VALUE)
+	public MerchantAccount createBankAccount(@RequestBody MerchantAccount merchantAccount) throws ParseException {
+		return bankAccountService.saveMerchant(merchantAccount);	
 	}
 	
 	@RequestMapping(value="login/{pan}/{secret}", method=RequestMethod.GET, produces=MediaType.APPLICATION_JSON_VALUE)
 	public BankAccount login(@PathVariable String pan,@PathVariable String secret) {
 		return bankAccountService.login(pan,secret);	
+	}
+	
+	@RequestMapping(value="merchantlogin/{merchantId}/{password}", method=RequestMethod.GET, produces=MediaType.APPLICATION_JSON_VALUE)
+	public MerchantAccount merchantlogin(@PathVariable String merchantId ,@PathVariable String password) {
+		return bankAccountService.merchantlogin(merchantId,password);	
 	}
 	
 	@RequestMapping(value="reserve/{pan}/{ammount}",method=RequestMethod.POST, produces=MediaType.APPLICATION_JSON_VALUE)
@@ -40,9 +53,8 @@ public class BankAccountController {
 		return bankAccountService.transferFunds(buyerPan,sellerPan,ammount);
 	}
 	
-	@RequestMapping(value="bank/{port}",method=RequestMethod.GET, produces=MediaType.APPLICATION_JSON_VALUE)
-	public Bank getBank(@PathVariable String port) {
-		return bankAccountService.getBank(port);
-	}
+	
+	
+	
 
 }

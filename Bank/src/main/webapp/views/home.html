@@ -2,9 +2,11 @@
 <br>
 <div align="center">
 <button class="btn btn-primary"  data-toggle="modal" data-target="#logWindow" >Login into your Account</button>
-
-<button class="btn btn-primary" data-toggle="modal" data-target="#regWindow" >Register new Account</button>
+<button class="btn btn-primary"  data-toggle="modal" data-target="#merchantlogWindow" >Login into your Merchant Account</button>
+<button class="btn btn-primary" ng-click="changedRole('USER')" data-toggle="modal" data-target="#regWindow" >Register new Account</button>
 </div>
+
+
 
 
 
@@ -18,18 +20,16 @@
 			<div class="modal-body">
 				<form role="form">
 					<div class="form-group">
-						<input  type="text"  data-ng-model="username"  class="form-control" placeholder="Username" required = "required" >
-						<input  type="text"  data-ng-model="lozinka" class="form-control" placeholder="Lozinka" required = "required">
-						<input  type="text" class="form-control" data-ng-model="ime" placeholder="Ime" required = "required">
-						<input  type="text" class="form-control" data-ng-model="prezime" placeholder="Prezime" required = "required">	
+						<input  type="text"  ng-model="password"  class="form-control" placeholder="Security Code" required = "required" >
+						<input  type="text"  ng-model="cardHolder" class="form-control" placeholder="Card Holder Name" required = "required">
 						<div class="selectContainer" >
-				        	<select class="form-control sirina" ng-model="uloga" ng-change="changedRole(uloga)"  ng-options="x for x in roles">
+				        	<select class="form-control" ng-model="role" ng-change="changedRole(role)"  ng-options="x for x in roles">
  							</select>
 				        </div>
 						
-						<input  type="text" id="adresa" name="adresa" data-ng-model="adresa" class="form-control" placeholder="Adresa isporuke" required = "required">
+						<input type="text" ondragstart="changedRole(role)" id="cardUsername" name="cardUsername" ng-model="cardUsername" class="form-control" placeholder="Merchant Username" required = "required">
 						<div class="modal-footer"> 
-							<input type="submit" data-dismiss="modal" ng-click="createKorisnik(username,lozinka,ime,prezime,datePicker,uloga,adresa)" class="btn btn-primary btn-block" value="Register" id="register" >
+							<input type="submit" data-dismiss="modal" ng-click="registerAccount(password,cardHolder,role,cardUsername)" class="btn btn-primary btn-block" value="Register" id="register" >
 						</div>
 					</div>
 					
@@ -63,4 +63,30 @@
 		</div>
 	
 	</div>
-</div>		
+</div>	
+
+<!-- MERCHANT LOGIN POPUP WINDOW -->
+
+<div class="modal fade" id="merchantlogWindow">
+	<div class="modal-dialog">
+		<div class="modal-content">
+			<div align="right" class="modal-header">
+				<buttontype="button" class="close"  data-dismiss="modal">&times;</button>
+			</div>
+			<div class="modal-body">
+				<form role="form">
+					<div class="form-group">
+						<input type="text" ng-model="merchantId" class="form-control" placeholder="Merchant Id" required = "required">
+						<input type="password" ng-model="merchantPassword" class="form-control" placeholder="Merchant Password" required = "required">
+						<div class="modal-footer">
+						<input type="submit" ng-click="loginMerchant(merchantId,merchantPassword)" class="btn btn-primary btn-block" data-dismiss="modal" value="Login"  >
+						</div>
+					</div>
+			</div>
+			</form>
+
+		</div>
+	</div>
+
+</div>
+</div>

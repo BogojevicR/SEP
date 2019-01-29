@@ -1,7 +1,11 @@
 package ftn.Bank.models;
 
 import java.io.Serializable;
+import java.text.DateFormat;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.util.Date;
+import java.util.UUID;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
@@ -104,6 +108,31 @@ public class BankAccount implements Serializable {
 		return "BankAccount [pan=" + pan + ", securityCode=" + securityCode + ", cardHolderName=" + cardHolderName
 				+ ", expirationDate=" + expirationDate + ", availableFunds=" + availableFunds + ", reservedFunds="
 				+ reservedFunds + "]";
+	}
+	
+	public void generatePan() throws ParseException {
+		this.pan+=" "+UUID.randomUUID().toString().replaceAll("[^0-9]", "").substring(0, 4);
+		this.pan+=" "+UUID.randomUUID().toString().replaceAll("[^0-9]", "").substring(0, 4);
+		this.pan+=" "+UUID.randomUUID().toString().replaceAll("[^0-9]", "").substring(0, 4);
+		
+		
+		Date date =new Date();
+		
+		date.setYear(date.getYear()+10);
+		DateFormat formatter = new SimpleDateFormat("MM/yyyy");
+		Date todayWithZeroTime = formatter.parse(formatter.format(date));
+		this.setExpirationDate(todayWithZeroTime);
+
+	}
+	
+	public boolean checkInfo(BankAccount ba) {
+		if(ba.getCardHolderName().equals(this.cardHolderName) && ba.getSecurityCode().equals(this.securityCode) && ba.getExpirationDate().compareTo(this.expirationDate) == 0 ) {
+
+			
+			return true;
+		}
+		return false;
+		
 	}
 	
 	

@@ -1,9 +1,18 @@
 <div ng-init="init()"></div>
 <h1 class="headingTop text-center">Welcome to {{bank.name}}</h1>
 <br>
-<h2 class="headingTop text-left">Card holder name: {{user.cardHolderName}}</h2>		
-<h2 class="headingTop text-left">Pan: {{user.pan}}</h2>		
-<h2 class="headingTop text-left">Expiration date: {{user.expirationDate}}</h2>		
-<h2 class="headingTop text-left">Available funds: {{user.availableFunds}}</h2>	
-<h2 class="headingTop text-left">Reserved funds: {{user.reservedFunds}}</h2>	
+
+	
+<h2 class="headingTop text-left">Card Info</h2>
 <br>
+<h3 class="headingTop text-left">Card holder name: {{user.cardHolderName}}</h3>		
+<h3 class="headingTop text-left">Pan: {{user.pan}}</h3>		
+<h3 class="headingTop text-left">Expiration date: {{user.expirationDate}}</h3>		
+<h3 class="headingTop text-left">Available funds: {{user.availableFunds}}</h3>	
+<h3 class="headingTop text-left">Reserved funds: {{user.reservedFunds}}</h3>	
+<br>
+<h2 class="headingTop text-left">Merchant Info</h2>
+<br>
+<h3 class="headingTop text-left">Merchant ID: {{merchantUser.merchantId}}</h3>		
+<h3 class="headingTop text-left">Merchant Password: {{merchantUser.merchantPassword}}</h3>		
+<h3 class="headingTop text-left">Merchant Username: {{merchantUser.username}}</h3>	

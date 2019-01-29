@@ -1,27 +1,57 @@
 package ftn.Bank.services;
 
+import java.math.BigInteger;
+import java.text.ParseException;
+import java.util.UUID;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import ftn.Bank.models.Bank;
 import ftn.Bank.models.BankAccount;
+import ftn.Bank.models.MerchantAccount;
 import ftn.Bank.repositories.BankAccountRepository;
 import ftn.Bank.repositories.BankRepository;
+import ftn.Bank.repositories.MerchantAccountRepository;
 
 @Service
 public class BankAccountService {
 	@Autowired
 	public BankAccountRepository bankAccountRep;
+	@Autowired 
+	public MerchantAccountRepository merchantAccountRep;
+	
 	@Autowired
 	public BankRepository bankRep;
 	
-	public boolean save(BankAccount bankAccount) {
+	public BankAccount save(BankAccount bankAccount) throws ParseException {
 		
+		bankAccount.generatePan();
+
 		if(bankAccountRep.findBypan(bankAccount.getPan())==null) {
 			bankAccountRep.save(bankAccount);
-			return true;
+			return bankAccount;
 		}
-		return false;
+		return null;
+	}
+	
+public MerchantAccount saveMerchant(MerchantAccount merchantAccount) throws ParseException {
+		
+	merchantAccount.getClientAccount().generatePan();
+	merchantAccount.generateMerchantAccount();
+
+	
+	if(merchantAccountRep.findOne(merchantAccount.getMerchantId())==null) {
+		
+		if(bankAccountRep.findBypan(merchantAccount.getClientAccount().getPan())==null) {
+			bankAccountRep.save(merchantAccount.getClientAccount());
+			merchantAccountRep.save(merchantAccount);
+			return merchantAccount;
+		}else {
+			return null;
+		}
+	}
+	return null;
 	}
 	
 public BankAccount login(String pan,String secret) throws NullPointerException {
@@ -37,6 +67,21 @@ public BankAccount login(String pan,String secret) throws NullPointerException {
 		
 			 
 	}
+
+public MerchantAccount merchantlogin(String merchantId,String password) throws NullPointerException {
+
+	MerchantAccount ma=merchantAccountRep.findBymerchantId(merchantId);
+	try {
+		if(ma.getMerchantPassword().equals(password)) {
+			return ma;
+		}
+	} catch (NullPointerException npe) {
+
+	}
+	return null;
+	
+		 
+}
 	
 	public boolean reserveFunds(String pan ,double ammount) {
 		BankAccount bankAccount=bankAccountRep.findBypan(pan);

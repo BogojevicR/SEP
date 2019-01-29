@@ -152,22 +152,20 @@ app.controller('appController',['$http','$window','$location','$rootScope','$sco
 		$scope.karticaInit=function(){
 			
 			var request={
-					  "id": 1195862,
-					  "merchantId": "asd",
-					  "merchantPassword": "asd",
-					  "merchantOrderId": "10",
+						"merchantOrderId": 1,
+					  "merchantId": "3d6b1825-8dce-486a-83fa-2d6e1108c16f",
+					  "merchantPassword": "1980",
+						"merchantTimestamp": "",
 					  "amount": "20",
-					  "sucessUrl": "Casopis",
-					  "failedUrl": "Placanje naucnog casopisa",
-					  "errorUrl": ""
-
+					  "sucessUrl": "http://localhost:8082",
+					  "failedUrl": "http://localhost:8082",
+					  "errorUrl": "http://localhost:8082"
 					};
 			
 			var json = JSON.stringify(request);
 			
 			appService.karticaPayment(json).then(function(response){
-				console.log(response);
-				window.location = response.data.payment_url;
+				window.location = response.data.paymentUrl+"?"+response.data.paymentId;
 			});	
 		
 	}
