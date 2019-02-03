@@ -11,8 +11,10 @@
 <h3 class="headingTop text-left">Available funds: {{user.availableFunds}}</h3>	
 <h3 class="headingTop text-left">Reserved funds: {{user.reservedFunds}}</h3>	
 <br>
-<h2 class="headingTop text-left">Merchant Info</h2>
-<br>
-<h3 class="headingTop text-left">Merchant ID: {{merchantUser.merchantId}}</h3>		
-<h3 class="headingTop text-left">Merchant Password: {{merchantUser.merchantPassword}}</h3>		
-<h3 class="headingTop text-left">Merchant Username: {{merchantUser.username}}</h3>	
+<div ng-if="merchantUser">
+    <h2 class="headingTop text-left">Merchant Info</h2>
+    <br>
+    <h3 class="headingTop text-left">Merchant ID: {{merchantUser.merchantId}}</h3>		
+    <h3 class="headingTop text-left">Merchant Password: {{merchantUser.merchantPassword}}</h3>		
+    <h3 class="headingTop text-left">Merchant Username: {{merchantUser.username}}</h3>	
+</div>

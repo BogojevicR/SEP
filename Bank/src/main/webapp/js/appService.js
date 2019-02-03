@@ -4,15 +4,15 @@ services.service('appService', ['$http', '$rootScope','$window',
                             	function($http, $rootScope,$window) {
 	// PROMENI UMESTO LOCALHOST CURRENT HOST
 	this.login = function(pan,secret){
-		return $http.get("http://localhost:8082/api/bankAccount/login/"+pan+"/"+secret)
+		return $http.get("http://localhost:"+location.port+"/api/bankAccount/login/"+pan+"/"+secret)
 	}
 
 	this.loginMerchant = function(merchantId,merchantPassword){
-		return $http.get("http://localhost:8082/api/bankAccount/merchantlogin/"+merchantId+"/"+merchantPassword)
+		return $http.get("http://localhost:"+location.port+"/api/bankAccount/merchantlogin/"+merchantId+"/"+merchantPassword)
 	}
 	
 	this.getBank = function(port){
-		return $http.get("http://localhost:8082/api/bank/"+port)
+		return $http.get("http://localhost:"+location.port+"/api/bank/"+port)
 	}
 
 
@@ -33,7 +33,7 @@ services.service('appService', ['$http', '$rootScope','$window',
 	};
 
 	this.getPayment=function(id){
-		return $http.get("http://localhost:8082/api/bank/getPayment/"+id)
+		return $http.get("http://localhost:"+location.port+"/api/bank/getPayment/"+id)
 	}
 
 	this.pay = function(requestJSON) {

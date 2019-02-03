@@ -1,7 +1,10 @@
 package ftn.Bank.controllers;
 
+import java.io.IOException;
 import java.util.Date;
 
+import org.codehaus.jackson.JsonGenerationException;
+import org.codehaus.jackson.map.JsonMappingException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.MediaType;
 import org.springframework.web.bind.annotation.CrossOrigin;
@@ -11,19 +14,23 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
 
-
 import ftn.Bank.models.Bank;
 import ftn.Bank.models.BankAccount;
+import ftn.Bank.models.MerchantAccount;
+import ftn.Bank.models.PCCRequest;
+import ftn.Bank.models.PCCResponse;
 import ftn.Bank.models.PaymentModel;
 import ftn.Bank.models.PaymentRequest;
 import ftn.Bank.models.Transaction;
 import ftn.Bank.models.TransferRequest;
 import ftn.Bank.repositories.BankAccountRepository;
 import ftn.Bank.repositories.MerchantAccountRepository;
+import ftn.Bank.repositories.PCCResponseRepository;
 import ftn.Bank.repositories.PaymentRepository;
 import ftn.Bank.repositories.PaymentRequestRepository;
-import ftn.Bank.repositories.TransactionRepository;
+import ftn.Bank.requests.Requests;
 import ftn.Bank.services.BankAccountService;
+import ftn.Bank.services.BankService;
 
 @RestController
 @RequestMapping("/api/bank")
@@ -32,6 +39,9 @@ public class BankController {
 	@Autowired
 	private BankAccountService bankAccountService;
 	@Autowired
+	private BankService bankService;
+	
+	@Autowired
 	private BankAccountRepository bankAccountRep;
 	@Autowired
 	private MerchantAccountRepository merchantAccountRep;
@@ -39,8 +49,8 @@ public class BankController {
 	private PaymentRequestRepository paymentRequestRep;
 	@Autowired
 	private PaymentRepository paymentRep;
-	@Autowired
-	private TransactionRepository transactionRep;
+	
+	
 	
 	@RequestMapping(value="/{port}",method=RequestMethod.GET, produces=MediaType.APPLICATION_JSON_VALUE)
 	public Bank getBank(@PathVariable String port) {
@@ -56,7 +66,9 @@ public class BankController {
 		paymentRequest.setMerchantTimestamp(date);
 		PaymentModel p=new PaymentModel();
 		p.setPaymentRequest(paymentRequest);
-		p.setPaymentUrl("http://localhost:8082/#/paymentInput");
+		MerchantAccount merchant=merchantAccountRep.findBymerchantId(paymentRequest.getMerchantId());
+		
+		p.setPaymentUrl("http://localhost:"+merchant.getClientAccount().getPortNumber()+"/#/paymentInput");
 		paymentRequestRep.save(paymentRequest);
 		paymentRep.save(p);
 		return p;
@@ -70,28 +82,27 @@ public class BankController {
 	}
 	
 	@RequestMapping(value = "/finalizeTransfer",method = RequestMethod.POST,produces = MediaType.APPLICATION_JSON_VALUE)
-	public Transaction  finalizeTransfer(@RequestBody TransferRequest request){
-		Transaction transaction=new Transaction();
-		BankAccount buyer=bankAccountRep.findBypan(request.getBuyer().getPan());
-		BankAccount seller=merchantAccountRep.findBymerchantId(request.getPayment().getPaymentRequest().getMerchantId()).getClientAccount();
-		if(buyer.checkInfo(request.getBuyer())){
-			System.out.println("Izvrsena transakcija!");
-			buyer.removeFunds(request.getPayment().getPaymentRequest().getAmount());
-			seller.addFunds(request.getPayment().getPaymentRequest().getAmount());
-			bankAccountRep.save(seller);
-			bankAccountRep.save(buyer);
-			transaction.setAcquirerTimestamp(new Date());
-			transaction.setMerchantOrderId(request.getPayment().getPaymentRequest().getMerchantOrderId());
-			transaction.setPaymentId(request.getPayment().getPaymentId());
-			transactionRep.save(transaction);
-			return transaction;
-		}else {
-			System.out.println("Izvrsena nije transakcija!");
-			return null;
-		}
-		
-		
+	public Transaction  finalizeTransfer(@RequestBody TransferRequest request) throws NullPointerException,  IOException{
+		Transaction transaction=bankService.finalizeTransfer(request);
+		return transaction;
 		
 	}
+	
+	
+	@CrossOrigin(origins = "http://localhost:8085")
+	@RequestMapping(value="/finalizePCCPayment",method=RequestMethod.POST, produces=MediaType.APPLICATION_JSON_VALUE)
+	public void  finalizePCCPayment(@RequestBody PCCRequest pccRequest) throws JsonGenerationException, JsonMappingException, IOException {
+		bankService.finalizePCCPayment(pccRequest);
+		
+	}
+	
+	@CrossOrigin(origins = "http://localhost:8085")
+	@RequestMapping(value="/finishPCCPayment",method=RequestMethod.POST, produces=MediaType.APPLICATION_JSON_VALUE)
+	public void  finishPCCPayment(@RequestBody PCCResponse pccResponse) throws JsonGenerationException, JsonMappingException, IOException {
+		
+		System.out.println("Finishing PCCPayment!");
+		
+	}
+	
 
 }

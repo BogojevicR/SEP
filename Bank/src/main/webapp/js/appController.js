@@ -66,6 +66,7 @@ app.controller('appController',['$http','$window','$location','$rootScope','$sco
 			localStorage.setItem("merchantId", "");
 			localStorage.setItem("merchantPassword", "");
 			localStorage.setItem("logged",false);
+			$scope.merchantUser=null;
 			$window.location.href = "/#/home"
 		}
 		else{
@@ -130,9 +131,10 @@ app.controller('appController',['$http','$window','$location','$rootScope','$sco
 			"payment":$scope.payment 
 		}
 		var requestJSON = JSON.stringify(transferRequest);
-		console.log(requestJSON);
+
 		appService.pay(requestJSON).then(function(response){
 			$scope.transaction=response.data;
+			console.log(response.data)
 		})
 
 	}

@@ -82,7 +82,7 @@ services.service('appService', ['$http', '$rootScope','$window',
 		console.log(json)
 		return $http({
 			method: 'POST',
-			url: "http://localhost:8082/api/bank/createPayment",
+			url: "http://localhost:8083/api/bank/createPayment",
 			data: json
 			});			
 	}

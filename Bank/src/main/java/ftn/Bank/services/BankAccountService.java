@@ -2,6 +2,7 @@ package ftn.Bank.services;
 
 import java.math.BigInteger;
 import java.text.ParseException;
+import java.util.Date;
 import java.util.UUID;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -10,9 +11,12 @@ import org.springframework.stereotype.Service;
 import ftn.Bank.models.Bank;
 import ftn.Bank.models.BankAccount;
 import ftn.Bank.models.MerchantAccount;
+import ftn.Bank.models.Transaction;
+import ftn.Bank.models.TransferRequest;
 import ftn.Bank.repositories.BankAccountRepository;
 import ftn.Bank.repositories.BankRepository;
 import ftn.Bank.repositories.MerchantAccountRepository;
+import ftn.Bank.repositories.TransactionRepository;
 
 @Service
 public class BankAccountService {
@@ -20,7 +24,6 @@ public class BankAccountService {
 	public BankAccountRepository bankAccountRep;
 	@Autowired 
 	public MerchantAccountRepository merchantAccountRep;
-	
 	@Autowired
 	public BankRepository bankRep;
 	
@@ -117,5 +120,7 @@ public MerchantAccount merchantlogin(String merchantId,String password) throws N
 	public Bank getBank(String port) {
 		return bankRep.findByport(port);
 	}
+
+	
 
 }

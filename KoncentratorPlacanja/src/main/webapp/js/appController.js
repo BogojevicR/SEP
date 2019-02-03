@@ -152,7 +152,6 @@ app.controller('appController',['$http','$window','$location','$rootScope','$sco
 		$scope.karticaInit=function(){
 			
 			var request={
-						"merchantOrderId": 1,
 					  "merchantId": "3d6b1825-8dce-486a-83fa-2d6e1108c16f",
 					  "merchantPassword": "1980",
 						"merchantTimestamp": "",

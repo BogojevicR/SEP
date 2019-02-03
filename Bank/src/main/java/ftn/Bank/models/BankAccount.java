@@ -92,12 +92,21 @@ public class BankAccount implements Serializable {
 	public void addFunds(double funds) {
 		this.availableFunds+=funds;
 	}
-	public void removeFunds(double funds) {
-		this.availableFunds-=funds;
+	public boolean removeFunds(double funds) {
+		if(this.availableFunds>=funds) {
+			this.availableFunds-=funds;
+			return true;
+		}
+		return false;
+		
 	}
 	
-	public void addReservedFunds(double funds) {
-		this.reservedFunds+=funds;
+	public boolean addReservedFunds(double funds) {
+		if(this.reservedFunds>=funds) {
+			this.reservedFunds-=funds;
+			return true;
+		}
+		return false;
 	}
 	public void removeReservedFunds(double funds) {
 		this.reservedFunds-=funds;
@@ -126,13 +135,27 @@ public class BankAccount implements Serializable {
 	}
 	
 	public boolean checkInfo(BankAccount ba) {
-		if(ba.getCardHolderName().equals(this.cardHolderName) && ba.getSecurityCode().equals(this.securityCode) && ba.getExpirationDate().compareTo(this.expirationDate) == 0 ) {
+		//TODO : MOZDA IMA PROBLEM SA CHECK EXPIRE DATE
+/*/		System.out.println(ba.getCardHolderName());
+		System.out.println(ba.getCardHolderName().equals(this.cardHolderName));
+		System.out.println(ba.getSecurityCode().equals(this.securityCode));
+		System.out.println(ba.getExpirationDate());
+		System.out.println(this.expirationDate);
+		System.out.println(ba.getExpirationDate().compareTo(this.expirationDate));
+		System.out.println(ba.getExpirationDate().compareTo(this.expirationDate) == 1);
+		*/
+		if(ba.getCardHolderName().equals(this.cardHolderName) && ba.getSecurityCode().equals(this.securityCode) && ba.getExpirationDate().compareTo(this.expirationDate) == 1 ) {
 
 			
 			return true;
 		}
 		return false;
 		
+	}
+	
+	public String getPortNumber() {
+		String[] splited = this.pan.split("\\s+");
+		return splited[0];
 	}
 	
 	
