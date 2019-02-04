@@ -168,5 +168,13 @@ app.controller('appController',['$http','$window','$location','$rootScope','$sco
 			});	
 		
 	}
+
+
+	$scope.bankFinalizeInit=function(){
+		$scope.merchantOrderId = $location.absUrl().split('?')[1];
+		appService.getPaymentRequest($scope.merchantOrderId).then(function(response){
+			$scope.paymentRequest=response.data;
+		});
+	}
 	
 }]);

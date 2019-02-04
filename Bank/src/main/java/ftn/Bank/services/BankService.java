@@ -19,6 +19,7 @@ import ftn.Bank.repositories.BankAccountRepository;
 import ftn.Bank.repositories.BankRepository;
 import ftn.Bank.repositories.MerchantAccountRepository;
 import ftn.Bank.repositories.PCCResponseRepository;
+import ftn.Bank.repositories.PaymentRepository;
 import ftn.Bank.repositories.PaymentRequestRepository;
 import ftn.Bank.repositories.TransactionRepository;
 import ftn.Bank.requests.Requests;
@@ -37,6 +38,8 @@ public class BankService {
 	private PCCResponseRepository pccResponseRep;
 	@Autowired
 	private PaymentRequestRepository paymentRequestRep;
+	@Autowired
+	private PaymentRepository paymentRep;
 
 	public  Transaction finalizeTransfer(TransferRequest request) throws JsonGenerationException, JsonMappingException, IOException  {
 		Transaction transaction=new Transaction();
@@ -72,8 +75,17 @@ public class BankService {
 			pcc.setMerchantOrderId(request.getPayment().getPaymentRequest().getMerchantOrderId());
 			String jsonInString = new ObjectMapper().writeValueAsString(pcc);
 
-			new Requests().makePostRequest("http://localhost:8085/api/pcc/finalizePayment", jsonInString);
-			return null;
+			String trans=new Requests().makePostRequest("http://localhost:8085/api/pcc/makePCCRequest", jsonInString);
+
+			
+			if(trans.equals("")) {
+				return null;
+			}else {
+				Transaction t=new ObjectMapper().readValue(trans, Transaction.class);
+				System.out.println(t.toString());
+				return t;
+			}
+			
 			
 		}
 		
@@ -81,24 +93,44 @@ public class BankService {
 	}
 	
 	
-	public void finalizePCCPayment(PCCRequest pccRequest) throws JsonGenerationException, JsonMappingException, IOException {
-		System.out.println("USAO U FINALIZE PCC!");
+	public String receivePCCRequest(PCCRequest pccRequest) throws JsonGenerationException, JsonMappingException, IOException {
+		System.out.println("Banka kupca prima Request za naplatu!");
+		
 		PaymentRequest pr =paymentRequestRep.getOne(pccRequest.getMerchantOrderId());
 		BankAccount buyer=bankAccountRep.getOne(pccRequest.getBuyersPan());
 		if(!buyer.addReservedFunds(pr.getAmount())) {
-			//odbaci
+			System.out.println("Nema dovoljno novca na racunu!");
+			return null;
 		}
-		PCCResponse pccResponse=new PCCResponse();
-		pccResponse.setAcquirerOrderId(pccRequest.getAcquirerOrderId());
-		pccResponse.setAcquirerTimestamp(pccRequest.getAcquirerTimestamp());
-		pccResponse.setBuyersPan(pccRequest.getBuyersPan());
-		pccResponse.setMerchantOrderId(pccRequest.getMerchantOrderId());
-		pccResponse.setIssuerTimestamp(new Date());
+		bankAccountRep.save(buyer);
+		PCCResponse pccResponse=new PCCResponse().makeFromPCCRequest(pccRequest);
 		pccResponseRep.save(pccResponse);
-		System.out.println("DOSAO OVDE");
+
 		String jsonInString = new ObjectMapper().writeValueAsString(pccResponse);
-		System.out.println("DOSAO OVDE2");
-		new Requests().makePostRequest("http://localhost:8085/api/pcc/finalizePCCPayment", jsonInString);
-		//TODO URADI TACKU 6.
+	
+		String responseString=new Requests().makePostRequest("http://localhost:8085/api/pcc/receivePCCResponse", jsonInString);
+		return responseString;
+	}
+
+
+	public Transaction finalizePCCTransfer(PCCResponse pccResponse) {
+		PaymentRequest pr=paymentRequestRep.getOne(pccResponse.getMerchantOrderId());
+		BankAccount seller=merchantAccountRep.getOne(pr.getMerchantId()).getClientAccount();
+		BankAccount buyer=bankAccountRep.getOne(pccResponse.getBuyersPan());
+		seller.addFunds(pr.getAmount());
+		buyer.removeReservedFunds(pr.getAmount());
+		bankAccountRep.save(buyer);
+		bankAccountRep.save(seller);
+		
+		Transaction transaction=new Transaction();
+		transaction.setAcquirerOrderId(pccResponse.getAcquirerOrderId());
+		transaction.setAcquirerTimestamp(pccResponse.getIssuerTimestamp());
+		transaction.setMerchantOrderId(pccResponse.getMerchantOrderId());	
+		transaction.setPaymentId(paymentRep.findBypaymentRequestMerchantOrderId(pccResponse.getMerchantOrderId()).getPaymentId());
+		transactionRep.save(transaction);
+
+		
+		return transaction;
+		
 	}
 }

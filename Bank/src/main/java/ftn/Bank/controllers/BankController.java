@@ -5,6 +5,7 @@ import java.util.Date;
 
 import org.codehaus.jackson.JsonGenerationException;
 import org.codehaus.jackson.map.JsonMappingException;
+import org.codehaus.jackson.map.ObjectMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.MediaType;
 import org.springframework.web.bind.annotation.CrossOrigin;
@@ -77,7 +78,7 @@ public class BankController {
 	
 	@RequestMapping(value="getPayment/{id}", method=RequestMethod.GET, produces=MediaType.APPLICATION_JSON_VALUE)
 	public PaymentModel login(@PathVariable Long id) {
-		System.out.println(id);
+
 		return paymentRep.findOne(id);	
 	}
 	
@@ -90,17 +91,22 @@ public class BankController {
 	
 	
 	@CrossOrigin(origins = "http://localhost:8085")
-	@RequestMapping(value="/finalizePCCPayment",method=RequestMethod.POST, produces=MediaType.APPLICATION_JSON_VALUE)
-	public void  finalizePCCPayment(@RequestBody PCCRequest pccRequest) throws JsonGenerationException, JsonMappingException, IOException {
-		bankService.finalizePCCPayment(pccRequest);
-		
+	@RequestMapping(value="/receivePCCRequest",method=RequestMethod.POST, produces=MediaType.APPLICATION_JSON_VALUE)
+	public String  receivePCCRequest(@RequestBody PCCRequest pccRequest) throws JsonGenerationException, JsonMappingException, IOException {
+
+		String responseString=bankService.receivePCCRequest(pccRequest);
+		return responseString;
 	}
 	
 	@CrossOrigin(origins = "http://localhost:8085")
-	@RequestMapping(value="/finishPCCPayment",method=RequestMethod.POST, produces=MediaType.APPLICATION_JSON_VALUE)
-	public void  finishPCCPayment(@RequestBody PCCResponse pccResponse) throws JsonGenerationException, JsonMappingException, IOException {
-		
+	@RequestMapping(value="/finalizePCCTransfer",method=RequestMethod.POST, produces=MediaType.APPLICATION_JSON_VALUE)
+	public String  finalizePCCTransfer(@RequestBody PCCResponse pccResponse) throws JsonGenerationException, JsonMappingException, IOException {
 		System.out.println("Finishing PCCPayment!");
+		Transaction transaction=bankService.finalizePCCTransfer(pccResponse);
+		
+		String jsonInString = new ObjectMapper().writeValueAsString(transaction);
+		return jsonInString;
+		
 		
 	}
 	

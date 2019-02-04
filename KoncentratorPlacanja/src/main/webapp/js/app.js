@@ -27,6 +27,10 @@ app.config(function($stateProvider,$urlRouterProvider) {
 		url:'/kartica',
 		templateUrl:'views/kartica.html',
 		controller:'appController'
+	}).state('finalizedBankPayment',{
+		url:'/finalizedBankPayment',
+		templateUrl:'views/finalizedBankPayment.html',
+		controller:'appController'
 	});
 	$urlRouterProvider.otherwise('/#');
 	

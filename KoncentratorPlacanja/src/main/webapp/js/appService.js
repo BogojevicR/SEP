@@ -86,6 +86,10 @@ services.service('appService', ['$http', '$rootScope','$window',
 			data: json
 			});			
 	}
+
+	this.getPaymentRequest=function(merchantOrderId){
+		 return $http.get("http://localhost:8081/api/KP/getPaymentRequest/"+merchantOrderId)
+	}
 	
 }
 ]);

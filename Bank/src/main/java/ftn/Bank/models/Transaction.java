@@ -48,6 +48,11 @@ public class Transaction {
 	public void setMerchantOrderId(long merchantOrderId) {
 		this.merchantOrderId = merchantOrderId;
 	}
+	@Override
+	public String toString() {
+		return "Transaction [acquirerOrderId=" + acquirerOrderId + ", paymentId=" + paymentId + ", acquirerTimestamp="
+				+ acquirerTimestamp + ", merchantOrderId=" + merchantOrderId + "]";
+	}
 	
 	
 

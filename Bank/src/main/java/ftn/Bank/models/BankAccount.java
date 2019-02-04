@@ -102,8 +102,9 @@ public class BankAccount implements Serializable {
 	}
 	
 	public boolean addReservedFunds(double funds) {
-		if(this.reservedFunds>=funds) {
-			this.reservedFunds-=funds;
+		if(this.availableFunds>=funds) {
+			this.availableFunds-=funds;
+			this.reservedFunds+=funds;
 			return true;
 		}
 		return false;

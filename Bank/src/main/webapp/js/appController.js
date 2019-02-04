@@ -134,7 +134,7 @@ app.controller('appController',['$http','$window','$location','$rootScope','$sco
 
 		appService.pay(requestJSON).then(function(response){
 			$scope.transaction=response.data;
-			console.log(response.data)
+			window.location="http://localhost:8081/#/finalizedBankPayment?"+response.data.merchantOrderId;
 		})
 
 	}

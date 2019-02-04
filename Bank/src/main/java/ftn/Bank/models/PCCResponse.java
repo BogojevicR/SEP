@@ -66,4 +66,15 @@ public class PCCResponse {
 		this.issuerTimestamp = issuerTimestamp;
 	}
 	
+	public PCCResponse makeFromPCCRequest(PCCRequest pccRequest) {
+		PCCResponse pccResponse=new PCCResponse();
+		pccResponse.setAcquirerOrderId(pccRequest.getAcquirerOrderId());
+		pccResponse.setAcquirerTimestamp(pccRequest.getAcquirerTimestamp());
+		pccResponse.setBuyersPan(pccRequest.getBuyersPan());
+		pccResponse.setMerchantOrderId(pccRequest.getMerchantOrderId());
+		pccResponse.setIssuerTimestamp(new Date());
+		
+		return pccResponse;
+	}
+	
 }
