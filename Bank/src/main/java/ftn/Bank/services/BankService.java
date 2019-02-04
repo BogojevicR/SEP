@@ -14,6 +14,7 @@ import ftn.Bank.models.PCCRequest;
 import ftn.Bank.models.PCCResponse;
 import ftn.Bank.models.PaymentRequest;
 import ftn.Bank.models.Transaction;
+import ftn.Bank.models.TransactionMessage;
 import ftn.Bank.models.TransferRequest;
 import ftn.Bank.repositories.BankAccountRepository;
 import ftn.Bank.repositories.BankRepository;
@@ -41,23 +42,25 @@ public class BankService {
 	@Autowired
 	private PaymentRepository paymentRep;
 
-	public  Transaction finalizeTransfer(TransferRequest request) throws JsonGenerationException, JsonMappingException, IOException  {
+	public  TransactionMessage finalizeTransfer(TransferRequest request) throws JsonGenerationException, JsonMappingException, IOException  {
 		Transaction transaction=new Transaction();
 		BankAccount buyer=bankAccountRep.findBypan(request.getBuyer().getPan());
 		BankAccount seller=merchantAccountRep.findBymerchantId(request.getPayment().getPaymentRequest().getMerchantId()).getClientAccount();
 		
 		if(!buyer.checkInfo(request.getBuyer())){
 			System.out.println("Transackija nije izvrsena! Nema podataka o datoj kartici!");
-			return null;
+			
+			return new TransactionMessage("Transackija nije izvrsena! Nema podataka o datoj kartici!",null);
 		}
 		
 		// ACCOUNT ARE IN SAME BANK
 		if(buyer.getPortNumber().equals(seller.getPortNumber())) {
 			if(!buyer.removeFunds(request.getPayment().getPaymentRequest().getAmount())) {
 				System.out.println("Transackija nije izvrsena! Nema dovoljno novca na racunu!");
-				return null;
+				//return null;
+				return new TransactionMessage("Transackija nije izvrsena! Nema dovoljno novca na racunu!",null);
 			}
-			System.out.println("Transackija je uspesno izvrsena!!");
+			System.out.println("Transackija je uspesno izvrsena!");
 			seller.addFunds(request.getPayment().getPaymentRequest().getAmount());
 			bankAccountRep.save(seller);
 			bankAccountRep.save(buyer);
@@ -65,7 +68,8 @@ public class BankService {
 			transaction.setMerchantOrderId(request.getPayment().getPaymentRequest().getMerchantOrderId());
 			transaction.setPaymentId(request.getPayment().getPaymentId());
 			transactionRep.save(transaction);
-			return transaction;
+		//	return transaction;
+			return new TransactionMessage("Transackija je uspesno izvrsena!",transaction);
 			
 		}else { 
 			System.out.println("Banke su na razlicitim portovima!");
@@ -79,11 +83,14 @@ public class BankService {
 
 			
 			if(trans.equals("")) {
-				return null;
+				return new TransactionMessage("Transackija nije izvrsena! Nema dovoljno novca na racunu!",null);
+				//return null;
 			}else {
 				Transaction t=new ObjectMapper().readValue(trans, Transaction.class);
 				System.out.println(t.toString());
-				return t;
+			//	return t;
+				return new TransactionMessage("Transackija je uspesno izvrsena!",t);
+
 			}
 			
 			

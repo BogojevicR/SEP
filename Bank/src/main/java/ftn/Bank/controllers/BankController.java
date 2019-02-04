@@ -16,20 +16,18 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
 
 import ftn.Bank.models.Bank;
-import ftn.Bank.models.BankAccount;
 import ftn.Bank.models.MerchantAccount;
 import ftn.Bank.models.PCCRequest;
 import ftn.Bank.models.PCCResponse;
 import ftn.Bank.models.PaymentModel;
 import ftn.Bank.models.PaymentRequest;
 import ftn.Bank.models.Transaction;
+import ftn.Bank.models.TransactionMessage;
 import ftn.Bank.models.TransferRequest;
 import ftn.Bank.repositories.BankAccountRepository;
 import ftn.Bank.repositories.MerchantAccountRepository;
-import ftn.Bank.repositories.PCCResponseRepository;
 import ftn.Bank.repositories.PaymentRepository;
 import ftn.Bank.repositories.PaymentRequestRepository;
-import ftn.Bank.requests.Requests;
 import ftn.Bank.services.BankAccountService;
 import ftn.Bank.services.BankService;
 
@@ -83,8 +81,8 @@ public class BankController {
 	}
 	
 	@RequestMapping(value = "/finalizeTransfer",method = RequestMethod.POST,produces = MediaType.APPLICATION_JSON_VALUE)
-	public Transaction  finalizeTransfer(@RequestBody TransferRequest request) throws NullPointerException,  IOException{
-		Transaction transaction=bankService.finalizeTransfer(request);
+	public TransactionMessage  finalizeTransfer(@RequestBody TransferRequest request) throws NullPointerException,  IOException{
+		TransactionMessage transaction=bankService.finalizeTransfer(request);
 		return transaction;
 		
 	}
