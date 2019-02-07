@@ -1,0 +1,34 @@
+<div ng-init="init();"></div>
+<br>
+<h1 align="center">Lista Casopisa</h1>
+<table id="tabelaCasopisa" align="center"  style="width: 90%;"  border = 2 >
+	<thead>
+		<tr align="center">
+			<th>Id</th>
+	     	<th>Naziv</th>
+            <th>ISSN</th>
+            <th>Cena</th>
+		    <th>Dodaj Casopis</th>
+		</tr>
+  	</thead>
+  	<tbody>
+		<tr ng-repeat="casopis in casopisi">
+			<td style="width: 30%;" align="center" >
+				{{ casopis.id }}
+			</td>
+			<td style="width: 30%;" align="center" >
+				{{ casopis.naziv }}
+			</td>
+			<td style="width: 30%;" align="center" >
+				{{ casopis.issn }}
+			</td>
+			<td style="width: 30%;" align="center" >
+				{{ casopis.cena }}
+			</td>
+			<td style="width: 30%;" align="center" >
+				<button class="btn btn-primary"  ng-click="dodajRad(casopis.id)">Dodaj novi Rad</button>
+			</td>
+			
+		</tr>
+	</tbody>
+</table>

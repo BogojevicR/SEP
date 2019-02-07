@@ -1,0 +1,103 @@
+<br>
+<h1 align="center">Lista Kupljenih Casopisa:</h1>
+<table id="tabelaCasopisa" align="center"  style="width: 90%;"  border = 2 >
+        <thead>
+            <tr align="center">
+                <th>Id</th>
+                <th>Radovi</th>
+
+            </tr>
+          </thead>
+          <tbody>
+            <tr ng-repeat="casopis in user.profulKupca.kupljeni_casopisi">
+                <td style="width: 10%;" align="center" >
+                    {{ casopis.naziv }}
+                </td>
+                <td  align="center" >
+                    <table id="tabelaRadova" align="center"  style="width: 90%;"  border = 1 >
+                        <thead>
+                            <tr align="center">
+                                <th>Naslov</th>
+                                <th>Naucna Oblast</th> 
+                                <th>Kljucni pojmovi</th>
+                                <th>Apstrakt</th>
+                                <th>Link</th>
+                            </tr>
+                          </thead>
+                          <tbody>
+                            <tr ng-repeat="rad in casopis.radovi  ">
+                                <td style="width: 30%;" align="center" >
+                                    {{ rad.naslov}}
+                                </td>       
+                                <td style="width: 30%;" align="center" >
+                                    {{  rad.naucnaOblast }}
+                                </td>
+                                <td style="width: 30%;" align="center" >
+                                        {{  rad.kljucniPojmovi }}
+                                </td>
+                                <td style="width: 30%;" align="center" >
+                                        {{  rad.apstrakt }}
+                                </td>
+                                <td style="width: 30%;" align="center" >
+                                    <a ng-href="{{rad.pdf}}" target="_blank">Link</a>
+                                </td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </td>
+                
+            </tr>
+        </tbody>
+    </table>
+<br>
+<h1 align="center">Lista Pretplata:</h1>
+<table id="tabelaPretplata" align="center"  style="width: 90%;"  border = 2 >
+        <thead>
+            <tr align="center">
+                <th>Id</th>
+                <th>Radovi</th>
+
+            </tr>
+          </thead>
+          <tbody>
+            <tr ng-repeat="pretplata in user.profulKupca.aktivne_pretplate">
+                <td style="width: 10%;" align="center" >
+                    {{ pretplata.casopis.naziv }}
+                </td>
+                <td  align="center" >
+                    <table id="tabelaRadovapretplata" align="center"  style="width: 90%;"  border = 1 >
+                        <thead>
+                            <tr align="center">
+                                <th>Naslov</th>
+                                <th>Naucna Oblast</th> 
+                                <th>Kljucni pojmovi</th>
+                                <th>Apstrakt</th>
+                                <th>Link</th>
+                            </tr>
+                          </thead>
+                          <tbody>
+                            <tr ng-repeat="rad in pretplata.casopis.radovi  ">
+                                <td style="width: 30%;" align="center" >
+                                    {{ rad.naslov}}
+                                </td>       
+                                <td style="width: 30%;" align="center" >
+                                    {{  rad.naucnaOblast }}
+                                </td>
+                                <td style="width: 30%;" align="center" >
+                                        {{  rad.kljucniPojmovi }}
+                                </td>
+                                <td style="width: 30%;" align="center" >
+                                        {{  rad.apstrakt }}
+                                </td>
+                                <td style="width: 30%;" align="center" >
+                                    <a ng-href="{{rad.pdf}}" target="_blank">Link</a>
+                                </td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </td>
+                
+            </tr>
+        </tbody>
+    </table>
+

@@ -1,0 +1,65 @@
+<div ng-init="init();"></div>
+<br>
+<h1 align="center">Lista Casopisa</h1>
+<table id="tabelaCasopisa" align="center"  style="width: 90%;"  border = 2 >
+	<thead>
+		<tr align="center">
+			<th>Id</th>
+	     	<th>Naziv</th>
+            <th>ISSN</th>
+            <th>Cena</th>
+            <th>Radovi</th>
+            <th>Kupovina</th>
+            <th>Pretplat</th>
+		</tr>
+  	</thead>
+  	<tbody>
+		<tr ng-repeat="casopis in casopisi">
+			<td style="width: 30%;" align="center" >
+				{{ casopis.id }}
+			</td>
+			
+			<td style="width: 30%;" align="center" >
+				{{ casopis.naziv }}
+			</td>
+			<td style="width: 30%;" align="center" >
+				{{ casopis.issn }}
+			</td>
+			<td style="width: 30%;" align="center" >
+				{{ casopis.cena }}
+            </td>
+            <td  align="center" >
+			    <table id="tabelaRadova" align="center"  style="width: 90%;"  border = 1 >
+					<thead>
+						<tr align="center">
+					     	<th>Naslov</th>
+							<th>Naucna Oblast</th>  
+						</tr>
+				  	</thead>
+				  	<tbody>
+						<tr ng-repeat="rad in casopis.radovi  ">
+							<td style="width: 30%;" align="center" >
+								{{ rad.naslov}}
+							</td>
+							
+							<td style="width: 30%;" align="center" >
+								{{  rad.naucnaOblast }}
+							</td>
+						</tr>
+					</tbody>
+				</table>
+			</td>
+			<td style="width: 30%;" align="center" >
+				<button class="btn btn-primary"  ng-click="kupiCasopis(casopis.id)">Kupi Casopis</button>
+            </td>
+            <td style="width: 30%;" align="center" >
+				<button class="btn btn-primary"  ng-click="pretplatiSe(casopis.id)">Pretplati se</button>
+			</td>
+			
+		</tr>
+	</tbody>
+</table>
+<div>
+    <br>
+     <a  id="profileBtn" class="btn btn-dark btn-lg btn-block "  href="#/profil">Profil</a>
+</div>

@@ -1,48 +1,35 @@
 var app=angular.module('app.controllers',[]);
 
-/*app.factory('responseInterceptor', [function(){
-	var responseInterceptor={
-			request: function(config){
-				console.log(config);
-				config.headers["Access-Control-Allow-Origin"]="http://localhost:8081";
-				config.headers["Access-Control-Allow-Methods"]="GET, PUT, POST, DELETE, HEAD, OPTIONS";
-				config.headers["Access-Control-Allow-Credentials"]="true";
-				config.headers["Access-Control-Allow-Headers"]="Content-Type, Accept, X-Requested-With, Authorization-Token, Response-Type";
 
-				return config;
-			},
-			response: function(response){
-				console.log(response.config);
-				response.config.headers["Access-Control-Allow-Origin"]="http://localhost:8081";
-				response.config.headers["Access-Control-Allow-Credentials"]="true";
-				response.config.headers["Access-Control-Allow-Methods"]="POST, GET, PUT, OPTIONS, DELETE";
-				response.config.headers["Access-Control-Max-Age"]="3600";
-				response.config.headers["Access-Control-Allow-Headers"]="Content-Type, Accept, X-Requested-With, Authorization-Token, Response-Type";
-				return response;
-			}		
-	};
-	return responseInterceptor;
-}]);
 
-app.config(['$httpProvider', function($httpProvider){
-	$httpProvider.interceptors.push('responseInterceptor');
-}]);
-*/
-
-app.controller('appController',['$http','$window','$location','$rootScope','$scope','appService',/*'responseInterceptor' , */
+app.controller('appController',['$http','$window','$location','$rootScope','$scope','appService',
     function($http,$window,$location,$scope,$rootScope, appService) {  
 	
+	$scope.init=function(){
+		$scope.token = $location.absUrl().split('?')[1];
+		$scope.casopisId = $scope.token.split('&')[0];
+		$scope.userEmail=$scope.token.split('&')[1];
+		localStorage.setItem("casopisId", 	$scope.casopisId);
+		localStorage.setItem("userEmail", $scope.userEmail);
+		if($scope.casopisId==null){
+			$window.location.href ="http://localhost:8084/#/";
+		}else{
+			appService.getCasopis($scope.casopisId).then(function(response){
+				$scope.casopis=response.data;
+			})
+		}
+	}
+
 	$scope.izaberi=function(opcija){
 		$scope.opcija=opcija;
-		$window.location.href = "/#/"+opcija;
-		$window.location.reload();
+		$location.path(opcija);
+		
 		
 	}
 	// PAYPAL
 	$scope.paypalInit=function(){
-		appService.getToken().then(function(response){
-			
-		//	console.log(response)
+		appService.getToken($scope.casopis).then(function(response){
+
 			$scope.kreiraj();
 		});
 		
@@ -58,7 +45,7 @@ app.controller('appController',['$http','$window','$location','$rootScope','$sco
 				  "transactions": [
 				    {
 				      "amount": {
-				        "total": "5.00",
+				        "total": $scope.casopis.cena,
 				        "currency": "USD",
 				      },
 				      "description": "The payment transaction description.",
@@ -70,10 +57,10 @@ app.controller('appController',['$http','$window','$location','$rootScope','$sco
 				      "item_list": {
 				        "items": [
 				          {
-				            "name": "Casopis 1",
-				            "description": "Naucni casopis.",
+				            "name": $scope.casopis.naziv,
+				            "description": "Casopis id:"+$scope.casopis.id,
 				            "quantity": "1",
-				            "price": "5.00",
+				            "price": $scope.casopis.cena,
 				            "tax": "0.00",
 				            "sku": "1",
 				            "currency": "USD"
@@ -85,7 +72,7 @@ app.controller('appController',['$http','$window','$location','$rootScope','$sco
 				  "note_to_payer": "Contact us for any questions on your order.",
 				  "redirect_urls": {
 				    "return_url": "http://localhost:8081/#/sucess",
-				    "cancel_url": "http://localhost:8081"
+				    "cancel_url": "http://localhost:8081/#/"
 				  }
 				};
 		
@@ -98,31 +85,89 @@ app.controller('appController',['$http','$window','$location','$rootScope','$sco
 	}
 	
 	$scope.sucessInit=function(){
-		$rootScope.url = $location.absUrl().split('?')[1];
-		$rootScope.params=$rootScope.url.split('&');
+		$scope.url = $location.absUrl().split('?')[1];
+		$scope.params=$scope.url.split('&');
 		
-		$rootScope.id=$rootScope.params[2].split('=')[1];
-		$rootScope.payer=JSON.stringify($rootScope.id);
+		$scope.id=$scope.params[2].split('=')[1];
+		$scope.payer=JSON.stringify($scope.id);
 		
-		$rootScope.id=$rootScope.params[0].split('=')[1];
-		$rootScope.payer=$rootScope.payer.slice(1, -1);
-		var json= {"payer_id" : $rootScope.payer}
-		$rootScope.payment=$rootScope.id;
+		$scope.id=$scope.params[0].split('=')[1];
+		$scope.payer=$scope.payer.slice(1, -1);
+		var json= {"payer_id" : $scope.payer}
+		$scope.payment=$scope.id;
 		
-		appService.plati($rootScope.payment,json).then(function(response){
-			$rootScope.par=response.data;
+		appService.plati($scope.payment,json).then(function(response){
+			$scope.dostaviCasopis(localStorage.getItem("userEmail"),localStorage.getItem("casopisId"));
 		});	
 	}
 	
-	$scope.getRacun=function(){
+	$scope.dostaviCasopis=function(email,id){
+		appService.dostaviCasopis(email,id).then(function(response){
+			alert("Casopis je kupljen!")
+			$window.location.href ="http://localhost:8084/#/profile";
+
+		});	
+
+	}
+
+	$scope.paypalSubscriptionInit=function(){
+		$scope.token = $location.absUrl().split('?')[1];
+		$scope.casopisId = $scope.token.split('&')[0];
+		$scope.userEmail=$scope.token.split('&')[1];
+		localStorage.setItem("casopisId", 	$scope.casopisId);
+		localStorage.setItem("userEmail", $scope.userEmail);
+
+		appService.getCasopis($scope.casopisId).then(function(response){
+			$scope.casopis=response.data;
+			$scope.paypalSubscription();
+		})
+	}
+
+	$scope.paypalSubscription=function(){
+		appService.getToken($scope.casopis).then(function(response){
+			$scope.sendSubscribe();
+		});
+	}
+	$scope.sendSubscribe=function(){
+		var zahtev={
+			"name": "Pretplata na casopis",
+			"description": "Mesecna i nedeljna pretplata na casopis.",
+			"start_date": "2019-02-22T09:13:49Z",
+			"plan":
+			{
+				"id": "P-8ES03530EH897271HYXZDNLA"
+			},
+			"payer":
+			{
+				"payment_method": "paypal"
+			}
+		}
+		var zahtevJson = JSON.stringify(zahtev);
+		appService.sendSubscribe(zahtevJson).then(function(response){
+			$window.location.href = response.data.links[0].href;
+		})
+
+	}
+
+	$scope.paypallSubscripeSuccess=function(){
+		appService.paypallSubscripeSuccess(localStorage.getItem("userEmail"),localStorage.getItem("casopisId")).then(function(response){
+			alert("Pretplata je uspela!")
+			$window.location.href ="http://localhost:8084/#/profile";
+		})
+	}
+
+
+/*	$scope.getRacun=function(){
 		
-		appService.getRacun($rootScope.data).then(function(response){
-			$rootScope.par=response.data;
+		appService.getRacun($scope.data).then(function(response){
+			$scope.par=response.data;
 
 		});	
 		
 	}
-	
+	*/
+
+
 	//BITCOIN
 	
 	$scope.bitcoinInit=function(){
@@ -152,10 +197,10 @@ app.controller('appController',['$http','$window','$location','$rootScope','$sco
 		$scope.karticaInit=function(){
 			
 			var request={
-					  "merchantId": "3d6b1825-8dce-486a-83fa-2d6e1108c16f",
-					  "merchantPassword": "1980",
+					  "merchantId": $scope.casopis.informacijeZaPlacanje.merchantId,
+					  "merchantPassword": $scope.casopis.informacijeZaPlacanje.merchantPassword,
 						"merchantTimestamp": "",
-					  "amount": "20",
+					  "amount": $scope.casopis.cena,
 					  "sucessUrl": "http://localhost:8082",
 					  "failedUrl": "http://localhost:8082",
 					  "errorUrl": "http://localhost:8082"
@@ -174,6 +219,7 @@ app.controller('appController',['$http','$window','$location','$rootScope','$sco
 		$scope.merchantOrderId = $location.absUrl().split('?')[1];
 		appService.getPaymentRequest($scope.merchantOrderId).then(function(response){
 			$scope.paymentRequest=response.data;
+			$scope.dostaviCasopis(localStorage.getItem("userEmail"),localStorage.getItem("casopisId"));
 		});
 	}
 	

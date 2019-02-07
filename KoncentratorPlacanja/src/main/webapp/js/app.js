@@ -31,6 +31,14 @@ app.config(function($stateProvider,$urlRouterProvider) {
 		url:'/finalizedBankPayment',
 		templateUrl:'views/finalizedBankPayment.html',
 		controller:'appController'
+	}).state('paypalSubscription',{
+		url:'/paypalSubscription',
+		templateUrl:'views/paypalSubscription.html',
+		controller:'appController'
+	}).state('successSubscription',{
+		url:'/successSubscription',
+		templateUrl:'views/successSubscription.html',
+		controller:'appController'
 	});
 	$urlRouterProvider.otherwise('/#');
 	

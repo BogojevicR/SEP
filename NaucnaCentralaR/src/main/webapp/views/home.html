@@ -1,0 +1,67 @@
+<div ng-init="init()"></div>
+<br>
+<div align="center">
+<button class="btn btn-primary"  data-toggle="modal" data-target="#logWindow" >Login into your Account</button>
+<button class="btn btn-primary"  data-toggle="modal" data-target="#regWindow" >Register new Account</button>
+</div>
+
+
+<div class="modal fade" id="regWindow">
+	<div class="modal-dialog">
+		<div class="modal-content">
+			<div align="right" class="modal-header">
+				<buttontype="button" id="regclose" name="regclose" class="close"  data-dismiss="modal">&times;</button>
+			</div>
+			<div class="modal-body">
+				<form role="form">
+					<div class="form-group">
+						<input  type="text"  ng-model="email"  class="form-control" placeholder="Email" required = "required" >
+						<input  type="text"  ng-model="ime" class="form-control" placeholder="Ime" required = "required">
+						<input  type="text"  ng-model="prezime" class="form-control" placeholder="Prezime" required = "required">
+						<input  type="text"  ng-model="grad" class="form-control" placeholder="Grad" required = "required">
+						<input  type="text"  ng-model="drzava" class="form-control" placeholder="Drzava" required = "required">
+						<input  type="password"  ng-model="password" class="form-control" placeholder="Password" required = "required">
+						<div class="selectContainer" >
+				        	<select class="form-control" ng-model="role" ng-change="changedRole(role)"  ng-options="x for x in roles">
+ 							</select>
+				        </div>	
+						<div class="modal-footer"> 
+							<input type="submit" data-dismiss="modal" ng-click="registerAccount(email,ime,prezime,grad,drzava,password,role)" class="btn btn-primary btn-block" value="Register" id="register" >
+						</div>
+					</div>
+					
+				</form>
+			</div>
+		</div>
+	</div>				
+</div>		
+
+<!-- LOGIN POPUP WINDOW -->
+
+<div class="modal fade" id="logWindow">
+		<div class="modal-dialog">
+			<div class="modal-content">
+				<div align="right" class="modal-header">
+					<buttontype="button" class="close"  data-dismiss="modal">&times;</button>
+				</div>
+				<div class="modal-body">
+					<form role="form">
+						<div class="form-group">
+							<input type="email" ng-model="emaillogin" class="form-control" placeholder="Email" required = "required">
+							<input type="password" ng-model="passwordlogin" class="form-control" placeholder="Password" required = "required">
+							<div class="modal-footer">
+							<input type="submit" ng-click="login(emaillogin,passwordlogin)" class="btn btn-primary btn-block" data-dismiss="modal" value="Login"  >
+							</div>
+						</div>
+				</div>
+				</form>
+
+			</div>
+		</div>
+	
+	</div>
+</div>	
+
+
+</div>
+</div>
