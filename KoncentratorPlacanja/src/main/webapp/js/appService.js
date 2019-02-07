@@ -18,7 +18,7 @@ services.service('appService', ['$http', '$rootScope','$window',
             data: 'grant_type=client_credentials'
         }).then(function(response){
         	$window.localStorage.setItem('token',response.data.access_token)
-        	$window.localStorage.setItem('token_type',response.data.token_type)
+			$window.localStorage.setItem('token_type',response.data.token_type)
         	$rootScope.token = response.data.access_token;
 			$rootScope.token_type = response.data.token_type;
         	return response;
