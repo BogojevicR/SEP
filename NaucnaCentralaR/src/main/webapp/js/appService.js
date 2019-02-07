@@ -28,9 +28,5 @@ services.service('appService', ['$http', '$rootScope','$window',
 			});	
 	}
 
-	this.kupiCasopis = function(id){
-		return $http.get("http://localhost:8081/#/?"+id)
-	}
-	
 }
 ]);

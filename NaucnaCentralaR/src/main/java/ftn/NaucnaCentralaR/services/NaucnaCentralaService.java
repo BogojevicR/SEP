@@ -66,9 +66,17 @@ public class NaucnaCentralaService {
 		Korisnici k=korisniciRep.findByemail(email);
 
 		Casopisi c=casopisiRep.findByid(casopisId);
-		if(k.getProfulKupca().proveriPretplatu(c.getId())) {
-			return null;
+		if(k.getProfulKupca().proveriPretplatu(c.getId())!=null) {
+
+			for(Pretplata p:k.getProfulKupca().getAktivne_pretplate()) {
+				if(p.getCasopis().getId()==casopisId) {
+
+					pretplataRep.save(p);
+					return p.getCasopis();
+				}
+			}
 		}
+		
 		Pretplata p=new Pretplata();
 		Date date= new Date();
 		date.setMonth(date.getMonth() + 1);
