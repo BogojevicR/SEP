@@ -1,0 +1,4 @@
+Pokretanje servera preko terminala:
+
+Potrebno je u pom.xml fajlu, tagu packaging, podesiti jar ekstenziju i izbildovati projekat preko maven build-a.
+Nakon toga, izgenerisace se xxx0.0.1-SNAPSHOT.jar fajl koji je potrebno pokrenuti iz cmd-a.
