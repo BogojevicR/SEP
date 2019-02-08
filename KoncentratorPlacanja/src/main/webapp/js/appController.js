@@ -181,7 +181,7 @@ app.controller('appController',['$http','$window','$location','$rootScope','$sco
 				  "description": "Placanje naucnog casopisa",
 				  "callback_url": "http://localhost:8081",
 				  "cancel_url": "https://coingate.com/invoice/6003de09-ee9a-4584-be0e-5c0c71c5e497",
-				  "success_url": "http://localhost:8081",
+				  "success_url": "http://localhost:8081/#/bicoinSucess?1&rale@gmail.com",
 				  "token": "MVsgsjGXv-pRWMnZzsuD4B5xcdnj-w"
 				};
 		
@@ -190,6 +190,14 @@ app.controller('appController',['$http','$window','$location','$rootScope','$sco
 		appService.bitcoinPayment(json).then(function(response){
 			console.log(response);
 		});	
+	}
+
+	$scope.bitcoinSuccess = function(){
+		appService.dostaviCasopis(localStorage.getItem("userEmail"),localStorage.getItem("casopisId")).then(function(response){
+			alert("Casopis je kupljen!")
+			$window.location.href ="http://localhost:8084/#/profile";
+
+		});
 	}
 		
 		//KARTICA

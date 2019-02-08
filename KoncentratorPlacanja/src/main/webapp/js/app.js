@@ -39,6 +39,10 @@ app.config(function($stateProvider,$urlRouterProvider) {
 		url:'/successSubscription',
 		templateUrl:'views/successSubscription.html',
 		controller:'appController'
+	}).state('bitcoinSuccess',{
+		url:'/bitcoinSuccess',
+		templateUrl:'views/bitcoinSuccess.html',
+		controller:'appController'
 	});
 	$urlRouterProvider.otherwise('/#');
 	
